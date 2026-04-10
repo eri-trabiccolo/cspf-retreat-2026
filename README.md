@@ -15,9 +15,10 @@ Slides are written in **Markdown** using [Marp](https://marp.app/). The HTML dec
 ```bash
 cd cspf-retreat-2026
 npx @marp-team/marp-cli@latest slides.md -o dist/index.html
+[ -d images ] && cp -r images dist/
 ```
 
-Open `dist/index.html` in a browser.
+Open `dist/index.html` in a browser. The `cp` line mirrors CI so local image paths resolve the same as on GitHub Pages.
 
 Optional local server:
 
@@ -83,4 +84,4 @@ Edit `slides.md`, commit, and push to `main`. The site rebuilds automatically.
 
 - `---` separates slides.  
 - Frontmatter at the top of `slides.md` sets theme, pagination, aspect ratio — see [Marp documentation](https://marp.app/#docs).  
-- For images, put files in the repo (e.g. `images/photo.png`) and reference them with a relative path in Markdown.
+- Put image files in the **`images/`** directory at the repo root (e.g. `images/photo.png`). In `slides.md`, reference them with a path relative to that file: `![Caption](images/photo.png)`. The deploy workflow copies `images/` into `dist/` so they load on GitHub Pages.
