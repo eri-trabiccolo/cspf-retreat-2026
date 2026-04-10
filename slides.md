@@ -51,19 +51,23 @@ style: |
 
 Over the past few months I've used AI to write unit tests for me:
 
-* Overall it did a solid job
-* The longer I used it, the more the same quirks kept showing up
+* Overall it did a solid job.
+* The longer I used it, the more the same quirks kept showing up.
 
 ---
 
 What I saw led me to pick this topic for Tips & Tricks, and to:
 
-* Build a very small codebase that mimics, at a manageable scale, real codebases I've worked on — so those same quirks show up in a controlled slice of code
-* Turn my takeaways into a real skill I can feed back to the AI
+* Build (I actually vibe coded it) a very small codebase that mimics, at a manageable scale, real codebases I've worked on — so those same quirks show up in a controlled slice of code.
+* Let AI create tests with a simple prompt and observe the results.
+* Turn my takeaways into project rules for test writing.
+* Let AI create tests again, and compare the results.
 
 ---
 
-Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast at the time):
+## Let AI create tests with a simple prompt
+
+Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast):
 
 > create tests for code @cspf-retreat-2026-code/inc with the following constraints:
 > - test coverage should be greater than 90%
@@ -73,13 +77,13 @@ Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast at the time):
 
 ## What it did:
 
-* It generated a lot of tests
-* It missed the coverage target — about 81%
-* It still hit most of the quirks I'd expected (maybe the smaller codebase meant it stumbled a little less)
+* It generated a lot of tests :).
+* It missed the coverage target — about **81%** lines, **86.5%** functions and methods.
+* It still hit most of the quirks I'd expected (maybe the smaller codebase meant it stumbled a little less).
 
 ---
 
-## Examples 1/3
+## Quirks Example 1/3
 
 It doesn't seem to be completely aware of the test framework we're in:
 
@@ -93,7 +97,7 @@ It doesn't seem to be completely aware of the test framework we're in:
 
 ---
 
-## Examples 2/3
+## Quirks Example 2/3
 
 Some problems with dynamic data
 
@@ -103,7 +107,7 @@ Some problems with dynamic data
 
 ---
 
-## Examples 3/3
+## Quirks Example 3/3
 
 Snapshots can match expectations while the test is still useless
 
@@ -119,9 +123,37 @@ Snapshots can match expectations while the test is still useless
 
 ---
 
-## How to brief the AI agent
+## Clearer instructions for the AI
 
+* I removed the old tests and wrote the takeaways as a **Cursor project rule** under `.cursor/rules/` — the same pain points I had already walked through (I can share the ruleset).
+* Then I ran this prompt: 
+* > create tests for code @cspf-retreat-2026-code/inc, test coverage should be greater than 90%.
 
+---
+
+### Result
+
+* Pros:
+  * Fewer meaningless tests (no more “green but useless” cases).
+  * Dynamic data handled with normalized snapshots.
+  * Fewer snapshots where a simple assertion was enough.
+  * Less redundant boilerplate from misunderstanding the test stack.
+  * Coverage: **86.97%** lines, **91.9%** functions and methods.
+  * Less frustration :D.
+
+* Cons:
+  * Longer runs — more meaningful tests and more `@runInSeparateProcess` cases; that's mostly extra volume, not a downside of the rules themselves.
+
+---
+
+## Final considerations:
+
+* Use AI to write or polish tests — it saves a lot of time and friction.
+* Don't trust the output blindly: review what it generates (including meaningless “green” tests).
+* Don't let the model change production code just to make tests pass — propose refactors explicitly if needed.
+* If the agent keeps failing tests in a loop, look at the **code under test**, not only the tests.
+* Have it work in **small slices** of the codebase at a time — easier to review and to catch bad assumptions early.
+* If you wish, treat my **Cursor project rule** as a starting point and adapt it to your project.
 
 ---
 
