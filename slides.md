@@ -32,7 +32,7 @@ style: |
 
 ## What's the hardest thing for a developer?
 
-* Convincing people that the bug you found is actually a feature!
+* Convincing people that the bug they found is actually a feature!
 * But we're not here for that…
 
 ---
@@ -58,7 +58,8 @@ Over the past few months I've used AI to write unit tests for me:
 
 What I saw led me to pick this topic for Tips & Tricks, and to:
 
-* Build (I actually vibe coded it) a very small codebase that mimics, at a manageable scale, real codebases I've worked on — so those same quirks show up in a controlled slice of code.
+* Build a very small codebase that mimics real codebases I'ver worked on 
+<!-- Presenter: at a manageable scale, real codebases I've worked on — so those same quirks show up in a controlled slice of code. -->
 * Let AI create tests with a simple prompt and observe the results.
 * Turn my takeaways into project rules for test writing.
 * Let AI create tests again, and compare the results.
@@ -125,9 +126,8 @@ Snapshots can match expectations while the test is still useless
 
 ## Clearer instructions for the AI
 
-* I removed the old tests and wrote the takeaways as a **Cursor project rule** under `.cursor/rules/` — the same pain points I had already walked through (I can share the ruleset).
-* Then I ran this prompt: 
-* > create tests for code @cspf-retreat-2026-code/inc, test coverage should be greater than 90%.
+* I removed the old tests and wrote the takeaways as a **Cursor project rule** under `.cursor/rules/` — the same pain points I had already walked through.
+* Then I ran this prompt: create tests for code in @cspf-retreat-2026-code/inc, test coverage should be greater than 90%.
 
 ---
 

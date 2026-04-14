@@ -1,0 +1,78 @@
+---
+description: PHPUnit / WordPress testing conventions for this repo (snapshots, framework awareness, no production hacks).
+globs: "**/tests/**/*.php"
+alwaysApply: false
+---
+
+# PHPUnit tests in this codebase
+
+Follow these when adding or changing tests under `tests/`.
+
+## Know the framework you are in
+
+- **Inherit the project’s test base**: follow the same parent test class and conventions as the rest of this repo. Do not re-implement teardown, global state handling, or helpers that the base layer or bundled libraries already provide.
+- **Use the stack’s facilities first**: before hand-rolling setup (e.g. manually saving and restoring globals or request state, or calling low-level reflection APIs), check whether the base class or shared test utilities already expose supported hooks or helpers. Prefer those to avoid redundant boilerplate, duplicated harness behavior, or deprecated APIs (such as reflection helpers your PHPUnit version no longer needs).
+- **Traits**: reuse traits already mixed into the base test case or sibling tests; add new ones only when they match existing project patterns.
+
+## Mocks vs fixtures
+
+- **`tests/Mocks/`** — Stub code: mocks, fakes, registries, global stubs, small includes used to control behavior in tests.
+
+- **`tests/Fixtures/`** — Assets: static files (images, CSS, JS, JSON, HTML), dummy plugin/theme trees, anything that is mostly data or on-disk layout.
+
+- If unsure: behavior-shaping code → **Mocks**; file content or folder structure → **Fixtures**.
+
+## Never change production code just to make tests easier
+
+- If the code under test is hard to test as-is, **do not** weaken or rewrite it in the same change set to suit the test.
+- **Propose** a small, explicit refactor or test seam in a separate step and ask for it to be applied; keep tests honest about real behavior.
+
+## Time-dependent behavior
+
+- For code that depends on “now”, keep tests **deterministic**: follow the same **time freeze / travel** pattern as sibling tests here (e.g. stack time-travel). Reset when the helper/API requires it. Do not rely on wall-clock timing.
+
+## Snapshots and data providers
+
+- Prefer **Spatie snapshot** assertions and **`@dataProvider`** where they fit: structured arrays, JSON-shaped data, HTML fragments, and multiple similar cases.
+- Prefer `assertMatchesJsonSnapshot`/`assertMatchesHtmlSnapshot` (or project equivalents) over huge inline expected arrays when output is stable after normalization.
+
+## Dynamic data (IDs, incremental values)
+
+- **Never** hard-code database or post IDs in snapshots; IDs are incremental and tests may run in isolation.
+- After creating entities (e.g. `$id1 = $this->factory()->post->create([...])`), **normalize** dynamic fields in the structure you snapshot — e.g. map each created post ID to a stable placeholder before asserting.
+
+Example (pattern only; `$service` is whatever you are testing; rename `getRowsFromService()` to the real method):
+
+```php
+$postId1 = $this->factory()->post->create([/* … */]);
+$postId2 = $this->factory()->post->create([/* … */]);
+
+$rows = $service->getRowsFromService();
+usort(
+    $rows,
+    static fn (array $a, array $b): int => $a['ID'] <=> $b['ID']
+);
+foreach ($rows as &$row) {
+    $id = (int) ($row['ID'] ?? 0);
+    if ($id === $postId1) {
+        $row['ID'] = 'POST_ID_1';
+    } elseif ($id === $postId2) {
+        $row['ID'] = 'POST_ID_2';
+    }
+}
+unset($row);
+
+$this->assertMatchesJsonSnapshot($rows);
+```
+
+Use string placeholders like `POST_ID_1` so snapshots stay readable and stable across runs.
+
+## Expensive tests (`@runInSeparateProcess`, etc.)
+
+- Annotations such as `@runInSeparateProcess` and `@preserveGlobalState disabled` are **slow and heavy**.
+- **Minimize** how many tests need them: combine scenarios where safe, order tests so shared setup runs once, and isolate separate-process tests to the smallest files reasonable—do not sprinkle them everywhere by default.
+
+## Meaningful tests, not just green tests
+
+- Passing assertions are not enough: tests must **exercise the real branches**.
+- If snapshots match but coverage shows the core logic never ran, the test is **flawed** — fix setup and inputs until the important paths execute; use coverage to confirm.
