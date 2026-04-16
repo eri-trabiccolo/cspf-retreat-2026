@@ -4,12 +4,24 @@ theme: default
 class: invert
 paginate: true
 size: 16:9
+footer: 'CSPF Retreat 2026<br/>Rocco Aliberti - Lead Developer @ Caseproof/InternalProjects'
 style: |
   section {
     font-family: system-ui, sans-serif;
+    box-sizing: border-box;
+    /* Reserve space so body content does not sit under the fixed footer */
+    padding-bottom: 3.25em !important;
   }
   h1 {
     color: #e8eaf0;
+  }
+  footer {
+    text-align: center;
+    width: 100%;
+    font-size: 9px;
+    opacity: 0.8;
+    line-height: 1.2;
+    padding-top: 0.15em;
   }
   .two-col-images {
     display: grid;
