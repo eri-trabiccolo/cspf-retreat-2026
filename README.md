@@ -12,13 +12,15 @@ Slides are written in **Markdown** using [Marp](https://marp.app/). The HTML dec
 
 **Option B — Command line**
 
+From the repo root:
+
 ```bash
-cd cspf-retreat-2026
-npx @marp-team/marp-cli@latest slides.md -o dist/index.html
-[ -d images ] && cp -r images dist/
+./bin/build.sh
 ```
 
-Open `dist/index.html` in a browser. The `cp` line mirrors CI so local image paths resolve the same as on GitHub Pages.
+If your shell says “Permission denied”, run `chmod +x bin/build.sh` once or use `bash bin/build.sh`.
+
+Open `dist/index.html` in a browser. This runs the same steps as CI (`bin/build.sh`).
 
 Optional local server:
 
@@ -84,4 +86,4 @@ Edit `slides.md`, commit, and push to `main`. The site rebuilds automatically.
 
 - `---` separates slides.  
 - Frontmatter at the top of `slides.md` sets theme, pagination, aspect ratio — see [Marp documentation](https://marp.app/#docs).  
-- Put image files in the **`images/`** directory at the repo root (e.g. `images/photo.png`). In `slides.md`, reference them with a path relative to that file: `![Caption](images/photo.png)`. The deploy workflow copies `images/` into `dist/` so they load on GitHub Pages.
+- Put image files in the **`images/`** directory at the repo root (e.g. `images/photo.png`). In `slides.md`, reference them with a path relative to that file: `![Caption](images/photo.png)`. The deploy workflow copies `images/` into `dist/` so they load on GitHub Pages. Use **`images/...`**, not `../images/...` — on a project site (`/repo-name/`), `..` in the URL escapes the repo path and breaks images on GitHub Pages while local preview may still look fine.

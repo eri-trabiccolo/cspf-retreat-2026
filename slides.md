@@ -24,6 +24,14 @@ style: |
   .two-col-images p {
     margin: 0;
   }
+  ul.plain-sub {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.35em 0 0 1.25rem;
+  }
+  ul.plain-sub blockquote {
+    margin: 0;
+  }
 ---
 
 # Cursor + PHPUnit: turning weak first drafts into real unit tests
@@ -58,7 +66,7 @@ Over the past few months I've used AI to write unit tests for me:
 
 What I saw led me to pick this topic for Tips & Tricks, and to:
 
-* Build a very small codebase that mimics real codebases I'ver worked on 
+* Build a very small codebase that mimics real codebases I've worked on.
 <!-- Presenter: at a manageable scale, real codebases I've worked on — so those same quirks show up in a controlled slice of code. -->
 * Let AI create tests with a simple prompt and observe the results.
 * Turn my takeaways into project rules for test writing.
@@ -66,13 +74,13 @@ What I saw led me to pick this topic for Tips & Tricks, and to:
 
 ---
 
-## Let AI create tests with a simple prompt
+## Let AI create tests with a simple prompt:
 
 Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast):
 
 > create tests for code @cspf-retreat-2026-code/inc with the following constraints:
-> - test coverage should be greater than 90%
-> - use snapshots and data providers where they fit best (e.g. when comparing arrays, structured data in general, or HTML)
+> - test coverage should be greater than 90%.
+> - use snapshots and data providers where they fit best (e.g. when comparing arrays, structured data in general, or HTML).
 
 ---
 
@@ -84,39 +92,39 @@ Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast):
 
 ---
 
-## Quirks Example 1/3
+## Quirks Example 1/3:
 
-It doesn't seem to be completely aware of the test framework we're in:
+It doesn't seem to be completely aware of the test framework we're in.
 
 * `$method = $this->getMethod(PostPublishedAgeService::class, 'computeDayDifference')` would have been enough.
-![](../images/test-draft-unneded-reflection-and-deprecated-method.png)
+![](images/test-draft-unneded-reflection-and-deprecated-method.png)
 <!-- Presenter: Our base test class uses a trait that already handles reflection for private/protected calls, and avoids the deprecated APIs for our PHPUnit version. -->
 
-* Redundant code
-![](../images/tests-draft-redundant-backup-restore-superglobals.png.png)
+* Redundant code.
+![](images/tests-draft-redundant-backup-restore-superglobals.png)
 <!-- Presenter: Our base class extends WordPress's base test case, which already resets (“flushes”) superglobals before each test — so manual backup/restore is redundant. -->
 
 ---
 
-## Quirks Example 2/3
+## Quirks Example 2/3:
 
-Some problems with dynamic data
+Some problems with dynamic data.
 
-* Hard-coded post IDs in snapshots
-![](../images/tests-draft-static-ids.png)
+* Hard-coded post IDs in snapshots.
+![](images/tests-draft-static-ids.png)
 <!-- Presenter: That's wrong because it assumes the "fake" posts we create for testing will always have those IDs — but post IDs are incremental, and for several reasons we can't rely on that. What if we run that specific test in isolation? -->
 
 ---
 
-## Quirks Example 3/3
+## Quirks Example 3/3:
 
-Snapshots can match expectations while the test is still useless
+Snapshots can match expectations while the test is still useless.
 
 <div class="two-col-images">
 
-![](../images/test-draft-fake-tests-empty-array.png)
+![](images/test-draft-fake-tests-empty-array.png)
 
-![](../images/test-draft-fake-tests-untested-lines.png)
+![](images/test-draft-fake-tests-untested-lines.png)
 
 </div>
 
@@ -124,14 +132,16 @@ Snapshots can match expectations while the test is still useless
 
 ---
 
-## Clearer instructions for the AI
+## Clearer instructions for the AI:
 
-* I removed the old tests and wrote the takeaways as a **Cursor project rule** under `.cursor/rules/` — the same pain points I had already walked through.
-* Then I ran this prompt: create tests for code in @cspf-retreat-2026-code/inc, test coverage should be greater than 90%.
+* I removed the old tests and **turned the takeaways into a Cursor project rule** under `.cursor/rules/` — summarizing the same issues as in the examples above.
+* Then I ran this prompt:
+
+  <ul class="plain-sub"><li><blockquote>create tests for code in @cspf-retreat-2026-code/inc, test coverage should be greater than 90%.</blockquote></li></ul>
 
 ---
 
-### Result
+### Result:
 
 * Pros:
   * Fewer meaningless tests (no more “green but useless” cases).
@@ -150,7 +160,7 @@ Snapshots can match expectations while the test is still useless
 
 * Use AI to write or polish tests — it saves a lot of time and friction.
 * Don't trust the output blindly: review what it generates (including meaningless “green” tests).
-* Don't let the model change production code just to make tests pass — propose refactors explicitly if needed.
+* Don't let the model **silently edit production code** just to make tests pass; if a refactor is warranted, have it **propose** the change — you apply it once you agree.
 * If the agent keeps failing tests in a loop, look at the **code under test**, not only the tests.
 * Have it work in **small slices** of the codebase at a time — easier to review and to catch bad assumptions early.
 * If you wish, treat my **Cursor project rule** as a starting point and adapt it to your project.

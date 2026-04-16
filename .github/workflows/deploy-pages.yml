@@ -23,10 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build HTML from Markdown (Marp)
-        run: |
-          mkdir -p dist
-          npx --yes @marp-team/marp-cli@latest slides.md -o dist/index.html
-          if [ -d images ]; then cp -r images dist/; fi
+        run: bash bin/build.sh
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
