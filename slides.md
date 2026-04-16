@@ -112,8 +112,20 @@ It doesn't seem to be completely aware of the test framework we're in.
 ![](images/test-draft-unneded-reflection-and-deprecated-method.png)
 <!-- Presenter: Our base test class uses a trait that already handles reflection for private/protected calls, and avoids the deprecated APIs for our PHPUnit version. -->
 
+---
+
+## Quirks Example 1/3 (continued):
+
 * Redundant code.
-![](images/tests-draft-redundant-backup-restore-superglobals.png)
+
+<div class="two-col-images">
+
+![](images/tests-draft-redundant-backup-restore-superglobals_1.png)
+
+![](images/tests-draft-redundant-backup-restore-superglobals_2.png)
+
+</div>
+
 <!-- Presenter: Our base class extends WordPress's base test case, which already resets (“flushes”) superglobals before each test — so manual backup/restore is redundant. -->
 
 ---
