@@ -36,6 +36,15 @@ style: |
   .two-col-images p {
     margin: 0;
   }
+  /* One column in a pair: cap height, keep aspect ratio */
+  .two-col-images img.slide-img-compact {
+    max-height: 13rem;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
   ul.plain-sub {
     list-style: none;
     padding-left: 0;
@@ -43,6 +52,22 @@ style: |
   }
   ul.plain-sub blockquote {
     margin: 0;
+  }
+  ul.plain-sub li .two-col-images {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Direct <img> children keep two columns when nested in plain-sub (markdown may merge into one block). */
+  ul.plain-sub .two-col-images > img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  ul.plain-sub li > img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 ---
 
@@ -109,7 +134,13 @@ Here's the simple prompt I gave Cursor's Agent (Composer 2 Fast):
 It doesn't seem to be completely aware of the test framework we're in.
 
 * `$method = $this->getMethod(PostPublishedAgeService::class, 'computeDayDifference')` would have been enough.
-![](images/test-draft-unneded-reflection-and-deprecated-method.png)
+
+  <ul class="plain-sub"><li>
+
+  <img src="images/test-draft-unneded-reflection-and-deprecated-method.png" alt="" />
+
+  </li></ul>
+
 <!-- Presenter: Our base test class uses a trait that already handles reflection for private/protected calls, and avoids the deprecated APIs for our PHPUnit version. -->
 
 ---
@@ -118,13 +149,17 @@ It doesn't seem to be completely aware of the test framework we're in.
 
 * Redundant code.
 
-<div class="two-col-images">
+  <ul class="plain-sub"><li>
 
-![](images/tests-draft-redundant-backup-restore-superglobals_1.png)
+  <div class="two-col-images">
 
-![](images/tests-draft-redundant-backup-restore-superglobals_2.png)
+  <img src="images/tests-draft-redundant-backup-restore-superglobals_1.png" alt="" />
 
-</div>
+  <img src="images/tests-draft-redundant-backup-restore-superglobals_2.png" alt="" />
+
+  </div>
+
+  </li></ul>
 
 <!-- Presenter: Our base class extends WordPress's base test case, which already resets (“flushes”) superglobals before each test — so manual backup/restore is redundant. -->
 
@@ -148,7 +183,7 @@ Snapshots can match expectations while the test is still useless.
 
 ![](images/test-draft-fake-tests-empty-array.png)
 
-![](images/test-draft-fake-tests-untested-lines.png)
+<img class="slide-img-compact" src="images/test-draft-fake-tests-untested-lines.png" alt="" />
 
 </div>
 
