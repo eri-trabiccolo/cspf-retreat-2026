@@ -15,6 +15,11 @@ style: |
   h1 {
     color: #e8eaf0;
   }
+  /* Emphasis: slightly brighter than body white on dark background */
+  section strong {
+    color: #7ec8e3;
+    font-weight: 700;
+  }
   footer {
     text-align: center;
     width: 100%;
@@ -68,6 +73,14 @@ style: |
     width: 100%;
     height: auto;
     display: block;
+  }
+  /* Pros slide screenshots: ~half linear size, keep aspect ratio */
+  ul.plain-sub li > img.pros-img {
+    width: 50%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
   }
 ---
 
@@ -205,24 +218,46 @@ Snapshots can match expectations while the test is still useless.
 * Pros:
   * Fewer meaningless tests (no more “green but useless” cases).
   * Dynamic data handled with normalized snapshots.
+
+    <ul class="plain-sub"><li>
+
+    <img class="pros-img" src="images/tests-draft-no-static-ids.png" alt="" />
+
+    </li></ul>
   * Fewer snapshots where a simple assertion was enough.
+
+---
+
+### Result (continued):
+
+* Pros:
   * Less redundant boilerplate from misunderstanding the test stack.
+
+    <ul class="plain-sub"><li>
+
+    <img class="pros-img" src="images/test-draft-no-unneded-reflection.png" alt="" />
+
+    </li></ul>
   * Coverage: **86.97%** lines, **91.9%** functions and methods.
   * Less frustration :D.
 
+---
+
+### Result (continued):
+
 * Cons:
-  * Longer runs — more meaningful tests and more `@runInSeparateProcess` cases; that's mostly extra volume, not a downside of the rules themselves.
+  * Longer runs — more meaningful tests but also more `@runInSeparateProcess` cases; that's mostly extra volume, not a downside of the rules themselves.
 
 ---
 
 ## Final considerations:
 
 * Use AI to write or polish tests — it saves a lot of time and friction.
-* Don't trust the output blindly: review what it generates (including meaningless “green” tests).
+* Don't trust the output blindly: review what it generates (including meaningless “green” tests); review code coverage.
 * Don't let the model **silently edit production code** just to make tests pass; if a refactor is warranted, have it **propose** the change — you apply it once you agree.
 * If the agent keeps failing tests in a loop, look at the **code under test**, not only the tests.
 * Have it work in **small slices** of the codebase at a time — easier to review and to catch bad assumptions early.
-* If you wish, treat my **Cursor project rule** as a starting point and adapt it to your project.
+* If you wish, treat my **Cursor/Claude project rule** as a starting point and adapt it to your project.
 
 ---
 
