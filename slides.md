@@ -215,38 +215,29 @@ Snapshots can match expectations while the test is still useless.
 
 ### Result:
 
-* Pros:
-  * Fewer meaningless tests (no more “green but useless” cases).
-  * Dynamic data handled with normalized snapshots.
+* Fewer meaningless tests (no more “green but useless” cases).
+* Dynamic data handled with normalized snapshots.
 
-    <ul class="plain-sub"><li>
+  <ul class="plain-sub"><li>
 
-    <img class="pros-img" src="images/tests-draft-no-static-ids.png" alt="" />
+  <img class="pros-img" src="images/tests-draft-no-static-ids.png" alt="" />
 
-    </li></ul>
-  * Fewer snapshots where a simple assertion was enough.
-
----
-
-### Result (continued):
-
-* Pros:
-  * Less redundant boilerplate from misunderstanding the test stack.
-
-    <ul class="plain-sub"><li>
-
-    <img class="pros-img" src="images/test-draft-no-unneded-reflection.png" alt="" />
-
-    </li></ul>
-  * Coverage: **86.97%** lines, **91.9%** functions and methods.
-  * Less frustration :D.
+  </li></ul>
+* Fewer snapshots where a simple assertion was enough.
 
 ---
 
 ### Result (continued):
 
-* Cons:
-  * Longer runs — more meaningful tests but also more `@runInSeparateProcess` cases; that's mostly extra volume, not a downside of the rules themselves.
+* Less redundant boilerplate from misunderstanding the test stack.
+
+  <ul class="plain-sub"><li>
+
+  <img class="pros-img" src="images/test-draft-no-unneded-reflection.png" alt="" />
+
+  </li></ul>
+* Coverage: **86.97%** lines, **91.9%** functions and methods.
+* Less frustration :D.
 
 ---
 
